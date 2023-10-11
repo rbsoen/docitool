@@ -240,15 +240,15 @@ def _uml(m: Match) -> str:
     if should_remake:
         with open(cache_file, "w") as cache:
             with open(params, "r") as puml_file:
-                cache.write(
-                    subprocess.run(
+                result = subprocess.run(
                         ["plantuml", "-Tsvg", "-pipe"],
                         stdout=subprocess.PIPE,
                         input=puml_file.read(),
                         encoding="utf-8"
-                    ).stdout
-                )
-    
+                ).stdout
+                cache.write(result)
+                return result
+
     with open(cache_file, "r") as cache:
         return cache.read()
             
