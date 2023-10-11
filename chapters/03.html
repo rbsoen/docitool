@@ -1,3 +1,63 @@
 <section id="c_03">
     <h2>Implementation Overview</h2>
+    <p>
+        The preprocessor assumes that heading tags (h2, h3, etc.)
+        <em>really are</em> used as headings, and not e.g. as a shorthand
+        for "bigger text".
+        
+        It <em>does not</em> allow for skipping headings e.g. h4 after an h2 without
+        an intervening h3.
+
+        
+        Other than what was just described, it does not validate markup 
+        any further than LXML does.
+    </p>
+    <p>
+        Every command in a HTML follows this format: <code>{{ verbatim: {{ (command): (arguments) }} }}</code>
+        The list of commands is as follows:
+    </p>
+    <dl>
+        <dt><code>table of contents</code></dt>
+        <dd>
+            Places a table of contents in the page from every heading tag
+            <strong>except</strong> h1. An h1 is assumed to be used for
+            the title of the document.
+
+            It takes no arguments.
+            <div class="arguments">
+                <b>Arguments</b>: None
+            </div>
+            <div class="example">
+                Example: <code>{{ verbatim: {{ table of contents: }}}}</code>
+            </div>
+        </dd>
+        <dt><code>include</code></dt>
+        <dd>
+            Copies the contents of an external file and pastes it
+            right where the command is. Takes one argument: the file itself.
+            It is relative to the current working directory.
+            <div class="arguments">
+                <b>Arguments</b>: <ul>
+                    <li>File path.</li>
+                </ul>
+            </div>
+            <div class="example">
+                <b>Example</b>: <code>{{ verbatim: {{ include: chapters/001.html }}}}</code>
+            </div>
+        </dd>
+        <dt><code>verbatim</code></dt>
+        <dd>
+            Pastes a piece of text into the document as-is.
+            Useful for escaping preprocessor commands, as is shown here
+            in this document.
+            <div class="arguments">
+                <b>Arguments</b>: <ul>
+                    <li>The raw string to paste in.</li>
+                </ul>
+            </div>
+            <div class="example">
+                <b>Example</b>: <code>{{ verbatim: {{ verbatim: {{ include: chapters/999.html }} }}}}</code>
+            </div>
+        </dd>
+    </dl>
 </section>
