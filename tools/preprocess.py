@@ -1,5 +1,5 @@
 import sys
-from typing import TextIO, Callable, Match, Any
+from typing import TextIO, Callable, Match, Any, Tuple
 from typing_extensions import TypedDict
 import re
 
@@ -8,6 +8,9 @@ from lxml.cssselect import CSSSelector
 from io import StringIO
 
 import logging
+
+import hashlib
+import os
 
 logging.basicConfig(format='%(levelname)s: %(message)s' ,stream=sys.stderr, level=logging.DEBUG)
 
@@ -20,6 +23,9 @@ COMMAND_RE = re.compile(r"\{\{(.+?):(.+)\}\}")
 HeadingTypeAtomic = TypedDict("HeadingTypeAtomic", {
     "name": str, "href": str, "children": list["HeadingTypeAtomic"]
 })
+
+# cache directory
+CACHEDIR = ".docitool_cache"
 
 ######## used globals ####################
 
@@ -89,7 +95,6 @@ def _addsourcesfrom(m: Match) -> str:
     Add Citeproc sources in TOML format  from a folder to the `sources` global.
     Returns a blank string.
     """
-    import os
     import toml
     from citeproc.source.json import CiteProcJSON
 
@@ -228,15 +233,25 @@ def _uml(m: Match) -> str:
 
     params = m.group(2).strip()
 
-    logger.debug("Reading PlantUML file from %s" % params)
+    logger.info("Inserting UML diagram from %s" % params)
 
-    with open(params, "r") as puml_file:
-        return subprocess.run(
-            ["plantuml", "-Tsvg", "-pipe"],
-            stdout=subprocess.PIPE,
-            input=puml_file.read(),
-            encoding="utf-8"
-        ).stdout
+    should_remake, cache_file = is_file_newer_than_cache(params)
+
+    if should_remake:
+        with open(cache_file, "w") as cache:
+            with open(params, "r") as puml_file:
+                cache.write(
+                    subprocess.run(
+                        ["plantuml", "-Tsvg", "-pipe"],
+                        stdout=subprocess.PIPE,
+                        input=puml_file.read(),
+                        encoding="utf-8"
+                    ).stdout
+                )
+    
+    with open(cache_file, "r") as cache:
+        return cache.read()
+            
 
 ######## map commands to text ############
 
@@ -264,6 +279,37 @@ commands_after: CommandTable = { # 2nd stage
 }
 
 ##########################################
+
+def is_file_newer_than_cache(filename: str) -> Tuple[bool, str]:
+    """
+    Returns a tuple:
+        [1] (bool) if True: file is newer than cache and should
+            be recreated.
+        [2] (str) Filename for the cache.
+    """
+    global logger
+
+    os.makedirs(CACHEDIR, exist_ok=True)
+
+    cache_file = os.path.join(CACHEDIR,
+        hashlib.sha1(filename.encode()).hexdigest() + '.cache'
+    )
+    if not os.path.exists(cache_file):
+        logger.debug("Cache for %s nonexistent, creating", filename)
+        return (True, cache_file)
+    
+    cache_stat = os.stat(cache_file)
+
+    if (
+        os.path.getmtime(filename) > os.path.getmtime(cache_file) \
+        or cache_stat.st_size < 1
+    ):
+        logger.debug("Cache for %s outdated, recreating", filename)
+        return (True, cache_file)
+    
+    logger.debug("Don't need to regenerate cache for %s", filename)
+    return (False, cache_file)
+    
 
 def landmarks2toc(content: StringIO, landmarks: list[HeadingTypeAtomic], level: int):
     """
