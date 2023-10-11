@@ -12,7 +12,9 @@ import logging
 import hashlib
 import os
 
-logging.basicConfig(format='%(levelname)s: %(message)s' ,stream=sys.stderr, level=logging.DEBUG)
+import argparse
+
+logging.basicConfig(format='%(levelname)s: %(message)s' ,stream=sys.stderr, level=logging.INFO)
 
 ##########################################
 
@@ -68,6 +70,8 @@ def _tableofcontents(m: Match) -> str:
     on the currently noted landmarks (that is, headings)
     """
     global landmarks
+    global logger
+    logger.info("Creating table of contents")
     writeable_string = StringIO()
     writeable_string.write('<ol class="tableofcontents">')
     landmarks2toc(writeable_string, landmarks, 0)
@@ -83,12 +87,21 @@ def _verbatim_keep_command(m: Match) -> str:
     """
     return m.group(0).strip()
 
+def _invalid_here(m: Match) -> str:
+    """
+    Alias to _verbatim_keep_command
+    """
+    logger.debug("invalid here: %s" % m.group(0))
+    return _verbatim_keep_command(m)
+
 def _verbatim(m: Match) -> str:
     """
     Pastes some text verbatim in the document.
     Used in the 2nd stage, returns just the arguments.
     """
-    return m.group(2).strip()
+    verbatim = m.group(2).strip()
+    logger.debug("'%s'" % verbatim)
+    return verbatim
 
 ########## optionals: citeproc #########################
 
@@ -171,6 +184,8 @@ def _tableofreferences(m: Match) -> str:
     global logger
 
     selements: list[str] = []
+
+    logger.info("Creating table of references")
 
     for i in bibliography.bibliography():
         html = str(i)
@@ -336,7 +351,8 @@ CommandTable = dict[str, CommandFunction]
 
 commands: CommandTable = { # 1st stage
     "include": _include,
-    "verbatim": _verbatim_keep_command,
+    "verbatim": _invalid_here, ###
+    "table of contents": _invalid_here, ###
 # -------- optional ---------
 # citeproc
     "add sources from": _addsourcesfrom,
@@ -351,8 +367,9 @@ commands: CommandTable = { # 1st stage
 }
 
 commands_after: CommandTable = { # 2nd stage
-    "table of contents": _tableofcontents,
+    "include": _invalid_here, ###
     "verbatim": _verbatim,
+    "table of contents": _tableofcontents,
 # -------- optional ---------
 # citeproc
     "table of references": _tableofreferences,
@@ -405,6 +422,7 @@ def landmarks2toc(content: StringIO, landmarks: list[HeadingTypeAtomic], level: 
     ]
 
     for h in landmarks:
+        logger.debug("ToC %s: %s" % (levels[level], h["name"]))
         content.write(
             '<li><a href="%s" class="_%s">%s</a>' % (
                 h["href"] if h["href"] else "#",
@@ -551,5 +569,30 @@ def process_file(content: str) -> str:
     return content
 
 if __name__ == "__main__":
-    with open(sys.argv[1], "r") as infile:
-        print(process_file(infile.read()))
+    psr = argparse.ArgumentParser()
+    psr.add_argument("input", nargs="?",
+        help="HTML file, use '-' to pipe from stdin instead",
+        type=argparse.FileType('r')
+    )
+    psr.add_argument("output", nargs="?",
+        help="Output HTML file, use '-' to output to stdout instead",
+        type=argparse.FileType('w')
+    )
+    psr.add_argument("--verbose", "-v",
+        help="Write more diagnostic output",
+        action="store_true"
+    )
+    args = psr.parse_args()
+
+    if args.verbose:
+        logging.root.setLevel(logging.DEBUG)
+
+    if (not args.input) or (not args.output):
+        psr.print_help()
+        exit()
+    
+    args.output.write(
+        process_file(
+            args.input.read()
+        )
+    )

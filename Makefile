@@ -1,5 +1,5 @@
 PYTHON ?= python3
-PREPROCESSOR = tools/preprocess.py
+PREPROCESSOR = docitool/__main__.py
 
 WP := weasyprint
 WPOPTS :=
@@ -10,7 +10,7 @@ document.pdf: document.html
 	$(WP) $(WPOPTS) $< $@
 
 document.html: index.html
-	$(PYTHON) $(PREPROCESSOR) $< > $@
+	$(PYTHON) $(PREPROCESSOR) $< $@
 
 .INTERMEDIATE: document.html
 

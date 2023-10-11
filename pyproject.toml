@@ -1,0 +1,25 @@
+[project]
+name = "docitool"
+version = "0.1"
+description = "Preprocessor for HTML-powered technical documents"
+keywords = ["html", "css", "preprocessor", "templating"]
+requires-python = ">=3.9"
+dependencies = [
+    "lxml >=4.9.0",
+    "typing-extensions >=4.0.0",
+    "cssselect >=1.2.0",
+]
+
+[project.optional-dependencies]
+citations = ["citeproc-py", "toml"]
+formulas = ["markdown-katex"]
+plots = ["matplotlib"]
+
+[build-system]
+requires = ["setuptools>=61.2", "wheel"]
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+include = ["docitool*"]
