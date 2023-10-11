@@ -1,0 +1,22 @@
+@startuml
+
+top to bottom direction
+
+[*] -> Stage1 : receive HTML
+Stage1 -> Stage1 : {{ include: <file> }}
+Stage1 -d-> Stage2
+Stage2 -> [*]: final HTML
+
+note top of Stage1
+	Main processing,
+	commands "safe to repeat"
+	can be here
+end note
+
+note bottom of Stage2
+	Post-processing commands
+	are run here
+end note
+
+@enduml
+

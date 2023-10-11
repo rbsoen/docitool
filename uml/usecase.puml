@@ -1,0 +1,16 @@
+@startuml
+actor User
+
+package "Text editor" {
+	usecase "Edit HTML, UML, etc." as U00
+}
+
+package "docitool" {
+	usecase "Generate HTML" as U10
+}
+
+User -> U00
+User -> U10
+
+@enduml
+

@@ -1,0 +1,28 @@
+@startuml
+
+
+
+partition Dispatch {
+
+start
+
+:Extract command name from LHS
+and parameter string from RHS;
+
+:Run function from table;
+
+if (Errored out?) then (yes)
+ :Leave command
+verbatim (no effect);
+else (no)
+ :Change command
+into processed version;
+endif
+
+:Return processed HTML;
+
+end
+}
+
+@enduml
+

@@ -1,0 +1,47 @@
+@startuml
+
+partition "Extract headings" {
+
+start
+
+:Parse HTML (LXML); <<procedure>>
+
+repeat: Find next heading in page
+
+:Compare heading level with
+the previous heading level;
+
+if (Level > (Previous Level + 1)?) then (yes)
+
+:Error;
+
+note left
+    Because a heading
+    lvl. was skipped, the
+    HTML is invalid
+end note
+
+end
+
+else (no)
+
+if (Level = (Previous Level + 1)) then (yes)
+    :Heading is new child of
+    the previous heading;
+else (no)
+    :New heading
+    in list;
+end if
+
+end if
+
+repeat while (Last heading?) is (no)
+
+->yes;
+
+end
+
+}
+
+@enduml
+

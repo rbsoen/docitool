@@ -1,3 +1,6 @@
 *.process.html
 .mypy_cache
 .vscode
+document.html
+*.pdf
+.docitool_cache/

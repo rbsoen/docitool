@@ -1,0 +1,18 @@
+@startuml
+
+start
+
+:Load HTML file; <<load>>
+
+:Dispatch, stage 1; <<procedure>>
+
+:Extract headings; <<procedure>>
+
+:Dispatch, stage 2; <<procedure>>
+
+:Save HTML file; <<save>>
+
+end
+
+@enduml
+

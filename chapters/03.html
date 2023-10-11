@@ -18,7 +18,8 @@
 
     <h3>Commands</h3>
     <p>
-        Every command in a HTML follows this format: <code>{{ verbatim: {{ (command): (arguments) }} }}</code>
+        Every command in a HTML follows this format: <code>{{ verbatim: {{ (command): (arguments) }} }}</code> If there is no arguments,
+        the format is simply <code>{{ verbatim: {{ (command): }} }}</code>.
     </p>
 
     <h4>Core commands</h4>
@@ -104,13 +105,13 @@
                     <details>
                         <summary>Conference paper</summary>
                         <pre>
-{{ include: biblio_samples/ordonez16.toml }}
+{{ include: include_samples/ordonez16.toml }}
                         </pre>
                     </details>
                     <details>
                         <summary>Website</summary>
                         <pre>
-{{ include: biblio_samples/trivium.toml }}
+{{ include: include_samples/trivium.toml }}
                         </pre>
                     </details>
                 </div>
@@ -232,7 +233,7 @@
             <dd>
                 <div class="dddesc">
                     Renders a PlantUML diagram file using an external PlantUML process. The file is relative to CWD.
-                    The output will be UML in the form of an SVG image.
+                    The output will be UML in the form of an <em>inlined</em> SVG image.
                 </div>
                 <div class="warning">
                     <b>Warning</b>: Ensure that the <code>plantuml</code> binary
@@ -247,6 +248,78 @@
                 </div>
                 <div class="example">
                     <b>Example</b>: <code>{{ verbatim: {{ uml: diagrams/activity.uml }} }}</code>
+                </div>
+            </dd>
+        </div>
+    </dl>
+
+    <h5>KaTeX</h5>
+    <p>
+        KaTeX can be used to embed mathematical formulas, through the use of
+        the <a href="https://pypi.org/project/markdown-katex/">markdown-katex</a> extension. This library needs to be installed in order to use
+        the following commands:
+    </p>
+    <dl class="commands">
+        <div>
+            <dt><code>formula</code></dt>
+            <dd>
+                <div class="dddesc">
+                    Renders a mathematical formula which KaTeX supports. Use of this command may cause a slight delay when initializing the KaTeX Markdown extension.
+                    It is highly recommended to use them with the <a href="https://github.com/KaTeX/KaTeX/releases">KaTeX CSS and fonts</a> for best results. Additionally, when rendering the HTML as a PDF, include them in your project and then link the CSS in the main HTML file to increase performance.
+                </div>
+                <div class="pkgreqs">
+                    <b>Package requirements</b>:
+                    <ul>
+                        <li>markdown</li>
+                        <li>markdown-katex</li>
+                    </ul>
+                </div>
+                <div class="arguments">
+                    <b>Arguments</b>:
+                    <ul>
+                        <li>The KaTeX formula file to render inline.</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <b>Example</b>: <code>{{ verbatim: {{ formula: math/matxmul.katex }} }}</code>
+                </div>
+            </dd>
+        </div>
+    </dl>
+
+    <h5>Matplotlib</h5>
+    <p>
+        <a href="https://matplotlib.org/">Matplotlib</a> can be used to render
+        out graphs.
+    </p>
+    <dl class="commands">
+        <div>
+            <dt><code>formula</code></dt>
+            <dd>
+                <div class="dddesc">
+                    Renders a graph from a Python script. The program operates
+                    on a variable called <code>plt</code>. An example program is as follows:
+                    <details>
+                        <summary>Graph program</summary>
+                        <pre>
+{{ include: include_samples/sample.matplotlib.py }}
+                        </pre>
+                    </details>
+                </div>
+                <div class="pkgreqs">
+                    <b>Package requirements</b>:
+                    <ul>
+                        <li>matplotlib</li>
+                    </ul>
+                </div>
+                <div class="arguments">
+                    <b>Arguments</b>:
+                    <ul>
+                        <li>The Python script to execute and render as an inline SVG graph.</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <b>Example</b>: <code>{{ verbatim: {{ graph: graphs/random.matplotlib.py }} }}</code>
                 </div>
             </dd>
         </div>
