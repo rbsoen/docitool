@@ -1,6 +1,9 @@
 <section id="c_03">
     <h2>Implementation Overview</h2>
     <p>
+        The preprocessor requires LXML to be installed.
+    </p>
+    <p>
         The preprocessor assumes that heading tags (h2, h3, etc.)
         <em>really are</em> used as headings, and not e.g. as a shorthand
         for "bigger text".
@@ -16,11 +19,13 @@
     <h3>Commands</h3>
     <p>
         Every command in a HTML follows this format: <code>{{ verbatim: {{ (command): (arguments) }} }}</code>
+    </p>
+
     <h4>Core commands</h4>
     <p>
         The list of core commands is as follows:
     </p>
-    <dl>
+    <dl class="commands">
         <div>
             <dt><code>table of contents</code></dt>
             <dd>
@@ -44,8 +49,7 @@
             <dd>
                 <div class="dddesc">
                     Copies the contents of an external file and pastes it
-                    right where the command is. Takes one argument: the file itself.
-                    It is relative to the current working directory.
+                    right where the command is. Takes one argument: the file itself, which is relative to CWD.
                 </div>
                 <div class="arguments">
                     <b>Arguments</b>: <ul>
@@ -84,9 +88,13 @@
         else installed to be able to use them.
     </p>
 
-    <h5>Citeproc-py</h5>
+    <h5>Citeproc</h5>
 
-    <dl>
+    <p>
+        The following commands require <a href="https://github.com/brechtm/citeproc-py">citeproc-py</a> to be installed in the current Python environment. Additionally, the <a href="https://pypi.org/project/toml/">toml</a> library must also be installed to load Citeproc sources.
+    </p>
+
+    <dl class="commands">
         <div>
             <dt><code>add sources from</code></dt>
             <dd>
@@ -208,6 +216,37 @@
                 </div>
                 <div class="example">
                     Example: <code>{{ verbatim: {{ table of references: }}}}</code>
+                </div>
+            </dd>
+        </div>
+    </dl>
+
+    <h5>PlantUML</h5>
+    <p>
+        The preprocessor also supports embedding PlantUML files using the
+        <code>uml</code> command. It requires the <a href="https://plantuml.com/">PlantUML</a> binary to be installed on your system. It does not require any additional Python packages to be installed.
+    </p>
+    <dl class="commands">
+        <div>
+            <dt><code>uml</code></dt>
+            <dd>
+                <div class="dddesc">
+                    Renders a PlantUML diagram file using an external PlantUML process. The file is relative to CWD.
+                    The output will be UML in the form of an SVG image.
+                </div>
+                <div class="warning">
+                    <b>Warning</b>: Ensure that the <code>plantuml</code> binary
+                    is available in PATH before using this
+                    command!
+                </div>
+                <div class="arguments">
+                    <b>Arguments</b>:
+                    <ul>
+                        <li>The file to render as a UML diagram.</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <b>Example</b>: <code>{{ verbatim: {{ uml: diagrams/activity.uml }} }}</code>
                 </div>
             </dd>
         </div>
