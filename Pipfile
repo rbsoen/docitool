@@ -11,3 +11,4 @@ python_version = "3.9"
 
 [packages]
 docitool = {extras = ["citations", "formulas", "plots"], ref = "master", git = "git+https://github.com/rbsoen/docitool"}
+weasyprint = "*"
