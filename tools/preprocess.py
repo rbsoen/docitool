@@ -265,17 +265,6 @@ def _formula(m: Match) -> str:
     import markdown
     from markdown_katex.extension import tex2html
 
-    if mdengine is None:
-        mdengine = markdown.Markdown(
-            extensions=["markdown_katex"],
-            extension_configs={
-                "markdown_katex": {
-                    "no_inline_svg": False,
-                    "insert_fonts_css": False,
-                }
-            }
-        )
-
     params = m.group(2).strip()
 
     logger.info("Inserting formula from %s" % params)
@@ -283,6 +272,16 @@ def _formula(m: Match) -> str:
     should_remake, cache_file = is_file_newer_than_cache(params)
     
     if should_remake:
+        if mdengine is None:
+            mdengine = markdown.Markdown(
+                extensions=["markdown_katex"],
+                extension_configs={
+                    "markdown_katex": {
+                        "no_inline_svg": False,
+                        "insert_fonts_css": False,
+                    }
+                }
+            )
         with open(cache_file, "w") as cache:
             with open(params, "r") as formula_file:
                 result = mdengine.convert(
