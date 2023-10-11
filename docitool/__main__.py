@@ -568,7 +568,7 @@ def process_file(content: str) -> str:
     content = replacer_after(content)
     return content
 
-def main(argv=sys.argv, stdout=sys.stdout, stdin=sys.stdin):
+def main(argv=sys.argv[1:], stdout=sys.stdout, stdin=sys.stdin):
     psr = argparse.ArgumentParser()
     psr.add_argument("input", nargs="?",
         help="HTML file, use '-' to pipe from stdin instead",
