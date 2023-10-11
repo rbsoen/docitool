@@ -38,6 +38,9 @@ citations: list[Any] = []
 cite_style: Any = None
 bibliography: Any = None
 
+# optional: katex
+mdengine: Any = None
+
 ####### commands #########################
 
 # commands must conform to this
@@ -76,6 +79,7 @@ def _verbatim_keep_command(m: Match) -> str:
     """
     Pastes some text verbatim in the document.
     Used in the 1st stage, returns the raw match.
+    Not needed, but useful for eliminating "invalid command" warnings
     """
     return m.group(0).strip()
 
@@ -251,7 +255,44 @@ def _uml(m: Match) -> str:
 
     with open(cache_file, "r") as cache:
         return cache.read()
-            
+
+########## optionals: katex #########################
+
+def _formula(m: Match) -> str:
+    global mdengine
+    global logger
+
+    import markdown
+    from markdown_katex.extension import tex2html
+
+    if mdengine is None:
+        mdengine = markdown.Markdown(
+            extensions=["markdown_katex"],
+            extension_configs={
+                "markdown_katex": {
+                    "no_inline_svg": False,
+                    "insert_fonts_css": False,
+                }
+            }
+        )
+
+    params = m.group(2).strip()
+
+    logger.info("Inserting formula from %s" % params)
+
+    should_remake, cache_file = is_file_newer_than_cache(params)
+    
+    if should_remake:
+        with open(cache_file, "w") as cache:
+            with open(params, "r") as formula_file:
+                result = mdengine.convert(
+                    "```math\n" + formula_file.read() + "\n```"
+                )
+                cache.write(result)
+                return result
+
+    with open(cache_file, "r") as cache:
+        return cache.read()
 
 ######## map commands to text ############
 
@@ -266,7 +307,9 @@ commands: CommandTable = { # 1st stage
     "use citation styles from": _usecitestylefrom,
     "ref": _ref_keep_command,
 # plantuml
-    "uml": _uml
+    "uml": _uml,
+# katex
+    "formula": _formula
 }
 
 commands_after: CommandTable = { # 2nd stage
