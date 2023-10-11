@@ -293,6 +293,43 @@ def _formula(m: Match) -> str:
     with open(cache_file, "r") as cache:
         return cache.read()
 
+def _graph(m: Match) -> str:
+    params = m.group(2).strip()
+
+    logger.info("Processing pyplot program %s" % params)
+
+    should_remake, cache_file = is_file_newer_than_cache(params)
+
+    if should_remake:
+        import matplotlib.pyplot as plt
+        plt.matplotlib.use("svg")
+
+        buffer = StringIO()
+
+        plt_globals: dict[str, Any] = {
+            "plt": plt
+        }
+        
+        plt_locals: dict[str, Any] = {}
+
+        with open(params, "r") as graph_code:
+            exec(graph_code.read(), plt_globals, plt_locals)
+        
+        plt.savefig(
+            buffer, format="svg", bbox_inches="tight", pad_inches=0
+        )
+        buffer.seek(0)
+
+        find_result = re.search(r"(<svg.+</svg>)", buffer.read(), re.DOTALL)
+        result = find_result.group(0) if find_result else ""
+
+        with open(cache_file, "w") as cache:
+            cache.write(result)
+            return result
+    
+    with open(cache_file, "r") as cache:
+        return cache.read()
+
 ######## map commands to text ############
 
 CommandTable = dict[str, CommandFunction]
@@ -308,7 +345,9 @@ commands: CommandTable = { # 1st stage
 # plantuml
     "uml": _uml,
 # katex
-    "formula": _formula
+    "formula": _formula,
+# matplotlib
+    "graph": _graph
 }
 
 commands_after: CommandTable = { # 2nd stage
