@@ -3,18 +3,11 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
-[packages]
-weasyprint = "*"
-lxml = "*"
-typing-extensions = "*"
-cssselect = "*"
-citeproc-py = "==0.6.0"
-toml = "*"
-markdown-katex = "==202112.1034"
-matplotlib = "*"
-
 [dev-packages]
 mypy = "*"
 
 [requires]
 python_version = "3.9"
+
+[packages]
+docitool = {extras = ["citations", "formulas", "plots"], ref = "master", git = "git+https://github.com/rbsoen/docitool"}
