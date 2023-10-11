@@ -15,6 +15,9 @@ citations = ["citeproc-py", "toml"]
 formulas = ["markdown-katex"]
 plots = ["matplotlib"]
 
+[project.scripts]
+docitool = "docitool.__main__:main"
+
 [build-system]
 requires = ["setuptools>=61.2", "wheel"]
 

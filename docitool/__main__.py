@@ -568,7 +568,7 @@ def process_file(content: str) -> str:
     content = replacer_after(content)
     return content
 
-if __name__ == "__main__":
+def main(argv=sys.argv, stdout=sys.stdout, stdin=sys.stdin):
     psr = argparse.ArgumentParser()
     psr.add_argument("input", nargs="?",
         help="HTML file, use '-' to pipe from stdin instead",
@@ -582,7 +582,7 @@ if __name__ == "__main__":
         help="Write more diagnostic output",
         action="store_true"
     )
-    args = psr.parse_args()
+    args = psr.parse_args(argv)
 
     if args.verbose:
         logging.root.setLevel(logging.DEBUG)
@@ -596,3 +596,6 @@ if __name__ == "__main__":
             args.input.read()
         )
     )
+
+if __name__ == "__main__":
+    main()
