@@ -262,9 +262,6 @@ def _formula(m: Match) -> str:
     global mdengine
     global logger
 
-    import markdown
-    from markdown_katex.extension import tex2html
-
     params = m.group(2).strip()
 
     logger.info("Inserting formula from %s" % params)
@@ -272,6 +269,9 @@ def _formula(m: Match) -> str:
     should_remake, cache_file = is_file_newer_than_cache(params)
     
     if should_remake:
+        import markdown
+        from markdown_katex.extension import tex2html
+        
         if mdengine is None:
             mdengine = markdown.Markdown(
                 extensions=["markdown_katex"],
