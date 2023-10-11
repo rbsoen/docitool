@@ -250,8 +250,8 @@ def _uml(m: Match) -> str:
                         input=puml_file.read(),
                         encoding="utf-8"
                 ).stdout
-                cache.write(result)
-                return result
+            cache.write(result)
+            return result
 
     with open(cache_file, "r") as cache:
         return cache.read()
@@ -287,8 +287,8 @@ def _formula(m: Match) -> str:
                 result = mdengine.convert(
                     "```math\n" + formula_file.read() + "\n```"
                 )
-                cache.write(result)
-                return result
+            cache.write(result)
+            return result
 
     with open(cache_file, "r") as cache:
         return cache.read()
