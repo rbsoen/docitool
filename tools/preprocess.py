@@ -1,5 +1,5 @@
 import sys
-from typing import TextIO, Callable, Match
+from typing import TextIO, Callable, Match, Any
 from typing_extensions import TypedDict
 import re
 
@@ -9,7 +9,7 @@ from io import StringIO
 
 import logging
 
-logging.basicConfig(format='%(levelname)s: %(message)s' ,stream=sys.stderr, level=logging.INFO)
+logging.basicConfig(format='%(levelname)s: %(message)s' ,stream=sys.stderr, level=logging.DEBUG)
 
 ##########################################
 
@@ -25,6 +25,12 @@ HeadingTypeAtomic = TypedDict("HeadingTypeAtomic", {
 
 logger = logging.getLogger('preprocess')
 landmarks: list[HeadingTypeAtomic] = []
+
+# optional: citeproc
+sources: Any = None
+citations: list[Any] = []
+cite_style: Any = None
+bibliography: Any = None
 
 ####### commands #########################
 
@@ -72,18 +78,157 @@ def _verbatim(m: Match) -> str:
     """
     return m.group(2).strip()
 
+def _addsourcesfrom(m: Match) -> str:
+    """
+    [citeproc-py; toml]
+
+    Add Citeproc sources in TOML format  from a folder to the `sources` global.
+    Returns a blank string.
+    """
+    import os
+    import toml
+    from citeproc.source.json import CiteProcJSON
+
+    global sources
+    global logger
+
+    params = m.group(2).strip()
+
+    if params == "":
+        raise Exception("Which folder to add sources from?")
+    
+    logger.info("Adding sources from %s" % params)
+    
+    srcs: Any = []
+
+    for i in os.walk(params):
+        folder, subfolders, files = i
+        logger.info ("in %s..." % folder)
+        for f in files:
+            logger.info("from file %s" % f)
+            toml_content = toml.load(os.path.join(folder, f))
+            srcs.append(toml_content)
+            try:
+                tmp_source = CiteProcJSON([toml_content])
+            except Exception as e:
+                logger.error("Error processing file %s!" % os.path.join(folder, f))
+                raise e
+    sources = CiteProcJSON(srcs)
+    return ""
+
+def _usecitestylefrom(m: Match) -> str:
+    """
+    [citeproc-py]
+
+    Uses citation styles from a file. Requires the `sources` global to be
+    defined first, e.g. by the "add sources from" command.
+    Returns a blank string.
+    """
+    from citeproc import CitationStylesStyle, CitationStylesBibliography
+
+    global sources, cite_style, bibliography
+    global logger
+
+    if cite_style is not None:
+        logger.error("Citation style already set, cannot change.")
+        return ""
+
+    params = m.group(2).strip()
+
+    if params == "":
+        raise Exception("Which file to use styles from?")
+    
+    if sources is None:
+        raise Exception("Use the \{\{ add sources from: <file> \}\} command first!")
+    
+    cite_style = CitationStylesStyle(params, validate=False)
+    bibliography = CitationStylesBibliography(cite_style, sources)
+
+    logger.info("Set citation style from '%s'" % params)
+    return ""
+
+def _tableofreferences(m: Match) -> str:
+    """
+    [citeproc-py]
+
+    Writes a <ol> table of references in the page based
+    on the bibliography.
+    """
+    global bibliography
+    global logger
+
+    selements: list[str] = []
+
+    for i in bibliography.bibliography():
+        html = str(i)
+        selements.append("<li>%s</li>" % html)
+    return '<ol id="tableofreferences">%s</ol>' % "\n".join(selements)
+
+def _ref_keep_command(m: Match) -> str:
+    """
+    [citeproc-py]
+
+    Registers a citation. Used in 1st stage, returns the raw match.
+    """
+    global bibliography, citations
+    global logger
+    from citeproc import CitationItem, Citation
+    
+    citation_array: list[Any] = [
+        CitationItem(i.strip())
+        for i in m.group(2).split(",")
+    ]
+
+    citations.append(Citation(citation_array))
+    bibliography.register(citations[-1])
+    bibliography.sort()
+
+    logger.debug("Registered citation %s" % citations[-1])
+    return m.group(0)
+
+def _ref(m: Match) -> str:
+    """
+    [citeproc-py]
+
+    Renders a citation to the document.
+    Used in 2nd stage.
+    """
+    global bibliography, citations
+    global logger
+
+    def warn(cite_item):
+        logger.warning('Reference with key "%s" not found in the bibliography.' % cite_item.key)
+    
+    main_citation = citations[-1]
+    csl_cite = bibliography.cite(main_citation, warn)
+    list_cite = main_citation['cites']
+    logger.debug('Outputting citation %s' % csl_cite)
+    if isinstance(csl_cite, str):
+        return csl_cite
+    else:
+        return str(csl_cite)
+
 ######## map commands to text ############
 
 CommandTable = dict[str, CommandFunction]
 
 commands: CommandTable = { # 1st stage
     "include": _include,
-    "verbatim": _verbatim_keep_command
+    "verbatim": _verbatim_keep_command,
+# -------- optional ---------
+# citeproc
+    "add sources from": _addsourcesfrom,
+    "use citation styles from": _usecitestylefrom,
+    "ref": _ref_keep_command
 }
 
 commands_after: CommandTable = { # 2nd stage
     "table of contents": _tableofcontents,
-    "verbatim": _verbatim
+    "verbatim": _verbatim,
+# -------- optional ---------
+# citeproc
+    "table of references": _tableofreferences,
+    "ref": _ref
 }
 
 ##########################################

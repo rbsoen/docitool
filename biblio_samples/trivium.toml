@@ -1,0 +1,20 @@
+id = "trivium"
+type = "article"
+
+title = "Trivium Specifications"
+publisher = "eSTREAM Submitted Papers"
+URL = "https://www.ecrypt.eu.org/stream/ciphers/trivium/trivium.pdf"
+
+[[author]]
+family = "de Cannière"
+given = "Cristophe"
+
+[[author]]
+given = "Bart"
+family = "Preneel"
+
+[issued]
+date-parts = [[2005,4,29]]
+
+[accessed]
+date-parts = [[2023,3,23]]

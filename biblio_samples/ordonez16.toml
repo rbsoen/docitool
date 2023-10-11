@@ -1,0 +1,26 @@
+id = "ordonez16"
+type = "paper-conference"
+
+title = "Fault attack on FPGA implementations of Trivium stream cipher"
+container-title = "2016 IEEE International Symposium on Circuits and Systems"
+event-place = "Montreal, QC, Canada"
+
+DOI = "10.1109/ISCAS.2016.7527302"
+
+[[author]]
+given = "F. Eugenio"
+family = "Potestad-Ordóñez"
+
+[[author]]
+given = "Carlos Jesús"
+family = "Jiménez-Fernández"
+
+[[author]]
+given = "Manuel"
+family = "Valencia-Barrero"
+
+[issued]
+date-parts = [[2016,5,25]]
+
+
+

@@ -8,6 +8,8 @@ weasyprint = "*"
 lxml = "*"
 typing-extensions = "*"
 cssselect = "*"
+citeproc-py = "==0.6.0"
+toml = "*"
 
 [dev-packages]
 mypy = "*"

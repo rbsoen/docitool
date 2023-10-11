@@ -12,52 +12,204 @@
         Other than what was just described, it does not validate markup 
         any further than LXML does.
     </p>
+
+    <h3>Commands</h3>
     <p>
         Every command in a HTML follows this format: <code>{{ verbatim: {{ (command): (arguments) }} }}</code>
-        The list of commands is as follows:
+    <h4>Core commands</h4>
+    <p>
+        The list of core commands is as follows:
     </p>
     <dl>
-        <dt><code>table of contents</code></dt>
-        <dd>
-            Places a table of contents in the page from every heading tag
-            <strong>except</strong> h1. An h1 is assumed to be used for
-            the title of the document.
+        <div>
+            <dt><code>table of contents</code></dt>
+            <dd>
+                <div class="dddesc">
+                    Places a table of contents in the page from every heading tag
+                    <strong>except</strong> h1, because an h1 is assumed to be used for
+                    the title of the document.
+        
+                    It takes no arguments.
+                </div>
+                <div class="arguments">
+                    <b>Arguments</b>: None
+                </div>
+                <div class="example">
+                    Example: <code>{{ verbatim: {{ table of contents: }}}}</code>
+                </div>
+            </dd>
+        </div>
+        <div>
+            <dt><code>include</code></dt>
+            <dd>
+                <div class="dddesc">
+                    Copies the contents of an external file and pastes it
+                    right where the command is. Takes one argument: the file itself.
+                    It is relative to the current working directory.
+                </div>
+                <div class="arguments">
+                    <b>Arguments</b>: <ul>
+                        <li>File path.</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <b>Example</b>: <code>{{ verbatim: {{ include: chapters/001.html }}}}</code>
+                </div>
+            </dd>
+        </div>
+        <div>
+            <dt><code>verbatim</code></dt>
+            <dd>
+                <div class="dddesc">
+                    Pastes a piece of text into the document as-is.
+                    Useful for escaping preprocessor commands, as is shown here
+                    in this document.
+                </div>
+                <div class="arguments">
+                    <b>Arguments</b>: <ul>
+                        <li>The raw string to paste in.</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <b>Example</b>: <code>{{ verbatim: {{ verbatim: {{ include: chapters/999.html }} }}}}</code>
+                </div>
+            </dd>
+        </div>
+    </dl>
 
-            It takes no arguments.
-            <div class="arguments">
-                <b>Arguments</b>: None
-            </div>
-            <div class="example">
-                Example: <code>{{ verbatim: {{ table of contents: }}}}</code>
-            </div>
-        </dd>
-        <dt><code>include</code></dt>
-        <dd>
-            Copies the contents of an external file and pastes it
-            right where the command is. Takes one argument: the file itself.
-            It is relative to the current working directory.
-            <div class="arguments">
-                <b>Arguments</b>: <ul>
-                    <li>File path.</li>
-                </ul>
-            </div>
-            <div class="example">
-                <b>Example</b>: <code>{{ verbatim: {{ include: chapters/001.html }}}}</code>
-            </div>
-        </dd>
-        <dt><code>verbatim</code></dt>
-        <dd>
-            Pastes a piece of text into the document as-is.
-            Useful for escaping preprocessor commands, as is shown here
-            in this document.
-            <div class="arguments">
-                <b>Arguments</b>: <ul>
-                    <li>The raw string to paste in.</li>
-                </ul>
-            </div>
-            <div class="example">
-                <b>Example</b>: <code>{{ verbatim: {{ verbatim: {{ include: chapters/999.html }} }}}}</code>
-            </div>
-        </dd>
+    <h4>Optional commands</h4>
+
+    <p>
+        There are also optional commands, meaning you need to have something
+        else installed to be able to use them.
+    </p>
+
+    <h5>Citeproc-py</h5>
+
+    <dl>
+        <div>
+            <dt><code>add sources from</code></dt>
+            <dd>
+                <div class="dddesc">
+                    Includes all Citeproc entries from a folder. These
+                    entries should be in TOML format. Example entries:
+                    <details>
+                        <summary>Conference paper</summary>
+                        <pre>
+{{ include: biblio_samples/ordonez16.toml }}
+                        </pre>
+                    </details>
+                    <details>
+                        <summary>Website</summary>
+                        <pre>
+{{ include: biblio_samples/trivium.toml }}
+                        </pre>
+                    </details>
+                </div>
+                <div class="pkgreqs">
+                    <b>Package requirements</b>:
+                    <ul>
+                        <li>toml</li>
+                        <li>citeproc-py</li>
+                    </ul>
+                </div>
+                <div class="arguments">
+                    <b>Arguments</b>:
+                    <ul>
+                        <li>Folder to include</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    Example: <code>{{ verbatim: {{ add sources from: bibliography/ }}}}</code>
+                </div>
+            </dd>
+        </div>
+
+        <div>
+            <dt><code>use citation styles from</code></dt>
+            <dd>
+                <div class="dddesc">
+                    Sets the citation style from
+                    a file or a built-in e.g. "harvard1". <em>Can only be
+                    set once!</em>
+                </div>
+                <div class="warning">
+                    <b>Warning</b>:
+                    Must be used after the <code>add sources from</code> command! 
+                </div>
+                <div class="pkgreqs">
+                    <b>Package requirements</b>:
+                    <ul>
+                        <li>citeproc-py</li>
+                    </ul>
+                </div>
+                <div class="arguments">
+                    <b>Arguments</b>:
+                    <ul>
+                        <li>File to load the CSL style from or a built-in</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    Example: <code>{{ verbatim: {{ use citation styles from: citation_styles/ieee.csl }}}}</code>
+                </div>
+            </dd>
+        </div>
+
+        <div>
+            <dt><code>ref</code></dt>
+            <dd>
+                <div class="dddesc">
+                    Print out one or more citations in the specified format
+                    into the document.
+                </div>
+                <div class="warning">
+                    <b>Warning</b>:
+                    Must be used after the <code>add sources from</code> and <code>use citation styles from</code> command!
+                </div>
+                <div class="pkgreqs">
+                    <b>Package requirements</b>:
+                    <ul>
+                        <li>citeproc-py</li>
+                    </ul>
+                </div>
+                <div class="arguments">
+                    <b>Arguments</b>:
+                    <ul>
+                        <li>Citation IDs, if multiple separated by commas</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    Example: <code>{{ verbatim: {{ ref: anon07, davie88 }}}}</code>
+                </div>
+            </dd>
+        </div>
+
+        <div>
+            <dt><code>table of references</code></dt>
+            <dd>
+                <div class="dddesc">
+                    Places a table of references (also known as the
+                    bibliography) for the document.
+                </div>
+                <div class="warning">
+                    <b>Warning</b>:
+                    Must be used after the <code>add sources from</code> and <code>use citation styles from</code> command! Additionally,
+                    at least one <code>ref</code> command must be used for the
+                    output to be meaningful.
+                </div>
+                <div class="pkgreqs">
+                    <b>Package requirements</b>:
+                    <ul>
+                        <li>citeproc-py</li>
+                    </ul>
+                </div>
+                <div class="arguments">
+                    <b>Arguments</b>: None
+                </div>
+                <div class="example">
+                    Example: <code>{{ verbatim: {{ table of references: }}}}</code>
+                </div>
+            </dd>
+        </div>
     </dl>
 </section>
