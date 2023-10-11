@@ -37,6 +37,8 @@ bibliography: Any = None
 # commands must conform to this
 CommandFunction = Callable[[Match], str]
 
+########## core commands #########################
+
 def _include(m: Match) -> str:
     """
     Includes a document within another document
@@ -77,6 +79,8 @@ def _verbatim(m: Match) -> str:
     Used in the 2nd stage, returns just the arguments.
     """
     return m.group(2).strip()
+
+########## optionals: citeproc #########################
 
 def _addsourcesfrom(m: Match) -> str:
     """
@@ -208,6 +212,32 @@ def _ref(m: Match) -> str:
     else:
         return str(csl_cite)
 
+########## optionals: plantuml #########################
+
+def _uml(m: Match) -> str:
+    """
+    [plantuml]
+
+    Returns a PlantUML-rendered SVG. Requires the external program
+    `plantuml` to be accessible from path.
+    """
+
+    global logger
+
+    import subprocess
+
+    params = m.group(2).strip()
+
+    logger.debug("Reading PlantUML file from %s" % params)
+
+    with open(params, "r") as puml_file:
+        return subprocess.run(
+            ["plantuml", "-Tsvg", "-pipe"],
+            stdout=subprocess.PIPE,
+            input=puml_file.read(),
+            encoding="utf-8"
+        ).stdout
+
 ######## map commands to text ############
 
 CommandTable = dict[str, CommandFunction]
@@ -219,7 +249,9 @@ commands: CommandTable = { # 1st stage
 # citeproc
     "add sources from": _addsourcesfrom,
     "use citation styles from": _usecitestylefrom,
-    "ref": _ref_keep_command
+    "ref": _ref_keep_command,
+# plantuml
+    "uml": _uml
 }
 
 commands_after: CommandTable = { # 2nd stage
