@@ -242,14 +242,14 @@ def _uml(m: Match) -> str:
     should_remake, cache_file = is_file_newer_than_cache(params)
 
     if should_remake:
+        with open(params, "r") as puml_file:
+            result = subprocess.run(
+                    ["plantuml", "-Tsvg", "-pipe"],
+                    stdout=subprocess.PIPE,
+                    input=puml_file.read(),
+                    encoding="utf-8"
+            ).stdout
         with open(cache_file, "w") as cache:
-            with open(params, "r") as puml_file:
-                result = subprocess.run(
-                        ["plantuml", "-Tsvg", "-pipe"],
-                        stdout=subprocess.PIPE,
-                        input=puml_file.read(),
-                        encoding="utf-8"
-                ).stdout
             cache.write(result)
             return result
 
@@ -282,11 +282,11 @@ def _formula(m: Match) -> str:
                     }
                 }
             )
+        with open(params, "r") as formula_file:
+            result = mdengine.convert(
+                "```math\n" + formula_file.read() + "\n```"
+            )
         with open(cache_file, "w") as cache:
-            with open(params, "r") as formula_file:
-                result = mdengine.convert(
-                    "```math\n" + formula_file.read() + "\n```"
-                )
             cache.write(result)
             return result
 
