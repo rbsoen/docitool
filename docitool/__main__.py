@@ -424,8 +424,8 @@ def landmarks2toc(content: StringIO, landmarks: list[HeadingTypeAtomic], level: 
     for h in landmarks:
         logger.debug("ToC %s: %s" % (levels[level], h["name"]))
         content.write(
-            '<li><a href="%s" class="_%s">%s</a>' % (
-                h["href"] if h["href"] else "#",
+            '<li><a href="#%s" class="_%s">%s</a>' % (
+                h["href"] if h["href"] else "",
                 levels[level],
                 h["name"]
             )
