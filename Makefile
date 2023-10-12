@@ -1,5 +1,5 @@
 PYTHON ?= python3
-DOCITOOL := docitool
+DOCITOOL := docitool/__main__.py
 DOCITOOLOPTS := -v
 
 WP := weasyprint
@@ -11,7 +11,7 @@ document.pdf: document.html
 	$(WP) $(WPOPTS) $< $@
 
 document.html: index.html
-	$(DOCITOOL) $(DOCITOOLOPTS) $< $@
+	$(PYTHON) $(DOCITOOL) $(DOCITOOLOPTS) $< $@
 
 .INTERMEDIATE: document.html
 
