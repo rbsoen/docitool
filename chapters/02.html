@@ -1,5 +1,5 @@
 <section id="c_02">
-    <h2>Architectural Overview</h2>
+    <h2 id="archoverview">Architectural Overview</h2>
 
     {{ uml: uml/usecase.puml }}
 
@@ -9,14 +9,14 @@
     {{ uml: uml/dispatcher.activity.puml }}
     {{ uml: uml/doc2landmarks.activity.puml }}
 
-    <h3>Stage 1</h3>
+    <h3 id="stg01">Stage 1</h3>
     <p>
         This is the main processing stage.
         Commands that need to run per-file, such as
         include and rendering commands may run here.
     </p>
 
-    <h3>Stage 2</h3>
+    <h3 id="stg02">Stage 2</h3>
     <p>
         This is the post-processing stage, where
         commands will be run just before the final

@@ -1,5 +1,5 @@
 <section id="c_03">
-    <h2>Implementation Overview</h2>
+    <h2 id="imploverview">Implementation Overview</h2>
     <p>
         The preprocessor requires LXML to be installed.
     </p>
@@ -16,13 +16,13 @@
         any further than LXML does.
     </p>
 
-    <h3>Commands</h3>
+    <h3 id="cmds">Commands</h3>
     <p>
         Every command in a HTML follows this format: <code>{{ verbatim: {{ (command): (arguments) }} }}</code> If there is no arguments,
         the format is simply <code>{{ verbatim: {{ (command): }} }}</code>.
     </p>
 
-    <h4>Core commands</h4>
+    <h4 id="corecmds">Core commands</h4>
     <p>
         The list of core commands is as follows:
     </p>
@@ -82,14 +82,14 @@
         </div>
     </dl>
 
-    <h4>Optional commands</h4>
+    <h4 id="optcmds">Optional commands</h4>
 
     <p>
         There are also optional commands, meaning you need to have something
         else installed to be able to use them.
     </p>
 
-    <h5>Citeproc</h5>
+    <h5 id="citeproccmds">Citeproc</h5>
 
     <p>
         The following commands require <a href="https://github.com/brechtm/citeproc-py">citeproc-py</a> to be installed in the current Python environment. Additionally, the <a href="https://pypi.org/project/toml/">toml</a> library must also be installed to load Citeproc sources.
@@ -222,7 +222,7 @@
         </div>
     </dl>
 
-    <h5>PlantUML</h5>
+    <h5 id="pumlcmds">PlantUML</h5>
     <p>
         The preprocessor also supports embedding PlantUML files using the
         <code>uml</code> command. It requires the <a href="https://plantuml.com/">PlantUML</a> binary to be installed on your system. It does not require any additional Python packages to be installed.
@@ -253,7 +253,7 @@
         </div>
     </dl>
 
-    <h5>KaTeX</h5>
+    <h5 id="katexcmds">KaTeX</h5>
     <p>
         KaTeX can be used to embed mathematical formulas, through the use of
         the <a href="https://pypi.org/project/markdown-katex/">markdown-katex</a> extension. This library needs to be installed in order to use
@@ -287,7 +287,7 @@
         </div>
     </dl>
 
-    <h5>Matplotlib</h5>
+    <h5 id="matplotlibcmds">Matplotlib</h5>
     <p>
         <a href="https://matplotlib.org/">Matplotlib</a> can be used to render
         out graphs.
