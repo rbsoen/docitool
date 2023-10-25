@@ -1,5 +1,5 @@
 PYTHON ?= python3
-DOCITOOL := docitool/__main__.py
+DOCITOOL := ../docitool/__main__.py
 DOCITOOLOPTS := -v
 
 WP := weasyprint
