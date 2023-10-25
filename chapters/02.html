@@ -1,27 +1,74 @@
 <section id="c_02">
     <h2 id="archoverview">Architectural Overview</h2>
 
-    {{ uml: uml/usecase.puml }}
+    <h3 id="c0201">Summary</h3>
 
+    <figure>
     {{ uml: uml/state.puml }}
+    <figcaption>Application state diagram</figcaption>
+    </figure>
 
-    {{ uml: uml/general.activity.puml }}
+    <p>
+    The preprocessor receives as its input an HTML file,
+    and outputs another HTML file on stdout. It operates in
+    two stages:
+    </p>
+    <ul>
+        <li>
+            <b>Stage 1</b>: the main processing stage.
+            Commands that only apply to one specific file&mdash;such
+            as include and rendering commands&mdash;may run here.
+            It should be considered safe to run the commands
+            multiple times in a single conversion run.
+        </li>
+        <li>
+            <b>Stage 2</b>: post processing stage.
+            Commands that only apply to the resulting document
+            may run here. They will run just before the final
+            file is returned. For example, table of contents,
+            references, and other such commands that
+            require the main content to be "fully baked".
+        </li>
+    </ul>
+    <p>
+    Each stage has its own set of commands which take some state
+    and replaces the command invocation with the result of the command.
+    Dispatchers are used to map the correct command with the correct
+    function in the program.
+    </p>
+
+    <h3 id="c0202">Command Parsing</h3>
+
+    <p>
+    In an input HTML file, commands take the form of <code>{{ verbatim: {{ command: arguments }} }}</code>.
+    If there are no arguments, it becomes simply <code>{{ verbatim: {{ command: }} }}</code>. A simple
+    split is performed on the <code>:</code> character, such that the command name ends up on the left hand
+    side, and the arguments on the right hand side.
+    </p>
+
+    <p>
+    The dispatcher takes the command name and uses a look up table to determine the correct function.
+    If the dispatcher is unable to find such a function for the invoked command, or the invocation itself
+    is malformed, no replacement is made and the original invocation remains in the resulting HTML document.
+    The process is repeated for all detected command invocations.
+    </p>
+
+    <figure>
     {{ uml: uml/dispatcher.activity.puml }}
+    <figcaption>Dispatcher</figcaption>
+    </figure>
+
+    <h3 id="c0203">Heading Detection</h3>
+
+    <p>
+    If table of contents are to be made, the preprocessor enforces correct HTML structuring, as it is necessary
+    to ensure a correctly-formatted table. The preprocessor does this by disallowing skipping heading levels when
+    going down levels (e.g. h2 then h4 or h5). Each heading <strong>must</strong> be followed by one of:
+    content, a heading one or more levels above it, a heading on the same level, or a heading one level below it.
+    </p>
+
+    <figure>
     {{ uml: uml/doc2landmarks.activity.puml }}
-
-    <h3 id="stg01">Stage 1</h3>
-    <p>
-        This is the main processing stage.
-        Commands that need to run per-file, such as
-        include and rendering commands may run here.
-    </p>
-
-    <h3 id="stg02">Stage 2</h3>
-    <p>
-        This is the post-processing stage, where
-        commands will be run just before the final
-        file is returned. For example, table of contents,
-        references, and other such commands that
-        require the main content to be "fully baked".
-    </p>
+    <figcaption>Heading detection</figcaption>
+    </figure>
 </section>

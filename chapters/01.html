@@ -3,7 +3,7 @@
     
     <h3 id="background">Background</h3>
     <p>
-        There is a need to create technical or academic languages using
+        There is a need to create technical or academic documents using
         tooling with just the right amount of control. That is,
         the tooling does not
         perform unwanted formatting for the user (e.g. Microsoft Word,
@@ -21,12 +21,20 @@
         as well as the advanced capabilities of modern CSS
         allows for adequate representation of a document in both
         text and print.
+    </p><p>
+        This is an HTML preprocessor which aims to provide the user
+        with a means of generating such documents by focusing on the
+        content and style as code, resulting in predictable and more
+        consistent documents. The result can act as both a web page in
+        its own right, or as printable documentation via the use of
+        HTML-to-PDF tooling such as <a href="https://weasyprint.org/">Weasyprint</a>.
     </p>
 
     <h3 id="purpose">Purpose</h3>
     <p>
         This document aims to outline the specific system in
-        which this document itself is generated with.
+        which this document itself is generated with, and serves
+        as a live example with which to demonstrate the system.
     </p>
 
     <h3 id="definitions">Definitions</h3>
@@ -51,6 +59,13 @@
                 Notation (JSON) and YAML Ain't Markup Language (YAML).
                 <a href="https://toml.io/en/">See here</a> for information
                 about the file format.
+            </dd>
+        </div>
+        <div>
+            <dt>stdout</dt>
+            <dd>
+                The default output stream for a terminal. It is reserved for
+                the main output of a program, not for logs or errors.
             </dd>
         </div>
     </dl>
