@@ -422,6 +422,8 @@ def landmarks2toc(content: StringIO, landmarks: list[HeadingTypeAtomic], level: 
     ]
 
     for h in landmarks:
+        if h["href"] is None: # headings with no ID will not be included.
+            continue
         logger.debug("ToC %s: %s" % (levels[level], h["name"]))
         content.write(
             '<li><a href="#%s" class="_%s">%s</a>' % (
