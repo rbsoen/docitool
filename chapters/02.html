@@ -14,21 +14,21 @@
     two stages:
     </p>
     <ul>
-        <li>
+        <li><p>
             <b>Stage 1</b>: the main processing stage.
             Commands that only apply to one specific file&mdash;such
             as include and rendering commands&mdash;may run here.
             It should be considered safe to run the commands
             multiple times in a single conversion run.
-        </li>
-        <li>
+        </p></li>
+        <li><p>
             <b>Stage 2</b>: post processing stage.
             Commands that only apply to the resulting document
             may run here. They will run just before the final
             file is returned. For example, table of contents,
             references, and other such commands that
             require the main content to be "fully baked".
-        </li>
+        </p></li>
     </ul>
     <p>
     Each stage has its own set of commands which take some state
@@ -37,7 +37,7 @@
     function in the program.
     </p>
 
-    <h3 id="c0202">Command Parsing</h3>
+    <h3 id="c0202" class="break-before">Command Parsing</h3>
 
     <p>
     In an input HTML file, commands take the form of <code>{{ verbatim: {{ command: arguments }} }}</code>.
@@ -58,7 +58,7 @@
     <figcaption>Dispatcher</figcaption>
     </figure>
 
-    <h3 id="c0203">Heading Detection</h3>
+    <h3 id="c0203" class="break-before">Heading Detection</h3>
 
     <p>
     If table of contents are to be made, the preprocessor enforces correct HTML structuring, as it is necessary

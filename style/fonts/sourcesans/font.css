@@ -1,0 +1,48 @@
+@font-face {
+	font-family: SourceSans3;
+	font-style: normal;
+	font-weight: 400;
+	src: url("SourceSans3-Regular.otf") format("opentype");
+}
+@font-face {
+	font-family: SourceSans3;
+	font-style: oblique;
+	font-weight: 400;
+	src: url("SourceSans3-It.otf") format("opentype");
+}
+@font-face {
+	font-family: SourceSans3;
+	font-style: normal;
+	font-weight: 500;
+	src: url("SourceSans3-Medium.otf") format("opentype");
+}
+@font-face {
+	font-family: SourceSans3;
+	font-style: oblique;
+	font-weight: 500;
+	src: url("SourceSans3-MediumIt.otf") format("opentype");
+}
+@font-face {
+	font-family: SourceSans3;
+	font-style: normal;
+	font-weight: 600;
+	src: url("SourceSans3-Semibold.otf") format("opentype");
+}
+@font-face {
+	font-family: SourceSans3;
+	font-style: oblique;
+	font-weight: 600;
+	src: url("SourceSans3-SemiboldIt.otf") format("opentype");
+}
+@font-face {
+	font-family: SourceSans3;
+	font-style: normal;
+	font-weight: 700;
+	src: url("SourceSans3-Bold.otf") format("opentype");
+}
+@font-face {
+	font-family: SourceSans3;
+	font-style: oblique;
+	font-weight: 700;
+	src: url("SourceSans3-BoldIt.otf") format("opentype");
+}

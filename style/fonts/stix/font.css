@@ -1,0 +1,48 @@
+@font-face {
+	font-family: StixTwo;
+	font-style: normal;
+	font-weight: 400;
+	src: url("STIXTwoText-Regular.otf") format("opentype");
+}
+@font-face {
+	font-family: StixTwo;
+	font-style: oblique;
+	font-weight: 400;
+	src: url("STIXTwoText-Italic.otf") format("opentype");
+}
+@font-face {
+	font-family: StixTwo;
+	font-style: normal;
+	font-weight: 500;
+	src: url("STIXTwoText-Medium.otf") format("opentype");
+}
+@font-face {
+	font-family: StixTwo;
+	font-style: oblique;
+	font-weight: 500;
+	src: url("STIXTwoText-MediumItalic.otf") format("opentype");
+}
+@font-face {
+	font-family: StixTwo;
+	font-style: normal;
+	font-weight: 600;
+	src: url("STIXTwoText-SemiBold.otf") format("opentype");
+}
+@font-face {
+	font-family: StixTwo;
+	font-style: oblique;
+	font-weight: 600;
+	src: url("STIXTwoText-SemiBoldItalic.otf") format("opentype");
+}
+@font-face {
+	font-family: StixTwo;
+	font-style: normal;
+	font-weight: 700;
+	src: url("STIXTwoText-Bold.otf") format("opentype");
+}
+@font-face {
+	font-family: StixTwo;
+	font-style: oblique;
+	font-weight: 700;
+	src: url("STIXTwoText-BoldItalic.otf") format("opentype");
+}

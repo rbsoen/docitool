@@ -1,0 +1,186 @@
+@import url("fonts/stix/font.css");
+@import url("fonts/sourcesans/font.css");
+
+@page {
+  size: a4;
+  margin: 3cm 1.5cm;
+  
+  @bottom-left {
+    content: "docitool";
+    font-weight: bold;
+  }
+  
+  @bottom-right {
+    content: counter(page);
+  }
+}
+
+@page:first {
+  @bottom-left { content: ""; }
+  @bottom-right { content: ""; }
+}
+
+html {
+  font-family: StixTwo;
+}
+
+body {
+  padding: 0 1em;
+}
+
+pre, code {
+  font-size: .8em;
+}
+
+p {
+  text-align: justify;
+  hyphens: auto;
+  margin: 1em 0 1em 0;
+}
+
+h1,h2,h3,h4,h5,h6,th {
+  font-family: SourceSans3;
+}
+
+#cover {
+  text-align: center;
+  height: 18em;
+  display: flex;
+  flex-direction: column;
+  padding: 15% 0;
+  font-size: 1.25em;
+}
+
+.tableofcontents {
+  padding: 0;
+  padding-top: 1rem;
+}
+
+.tableofcontents > li {
+  padding-bottom: .5em;
+}
+
+.tableofcontents li a:after {
+  content: leader(".") target-counter(attr(href), page);
+}
+
+.tableofcontents li::marker {
+  content: "";
+  background: red;
+}
+
+table {
+  width: 100%;
+  font-size: .9em;
+}
+
+td {
+  padding: .25em;
+}
+
+th {
+  border-bottom: 1.5pt solid #aaa;
+  padding: .25em 1em;
+  text-align: center;
+}
+
+th {
+  font-variant: all-small-caps;
+  line-height: 1;
+}
+
+section {
+  break-after: always;
+}
+
+.break-before {
+  break-before: always;
+}
+
+ul, ol {
+  padding: 0 0 0 1.5rem;
+}
+
+h2,h3,h4,h5,h6 {
+  padding-top: 1rem;
+}
+
+dl > div {
+  margin: 1em 0;
+}
+
+dt {
+  font-weight: bold;
+}
+
+.warning, .arguments, .example, .pkgreqs {
+  padding: .5em 1em;
+  margin: 0 0 0 .5em;
+  border-left: 3pt solid #ccc;
+}
+
+.example {
+  border-left-color: #ca0;
+  background: #fff2ef;
+}
+
+.warning, .wrong-example {
+  border-left-color: #c00;
+  background: #ffe0e0;
+}
+
+.correct-example {
+  border-left-color: #0c0;
+  background: #efe;
+}
+
+summary {
+  font-weight: bold;
+  padding-top: 1em;
+}
+
+details {
+  overflow: none;
+}
+
+details pre {
+  word-wrap: break-word;
+  white-space: break-spaces;
+  padding: 1em;
+  background: #eee;
+  border-radius: 5pt;
+}
+
+figure {
+  max-width: 80%;
+  text-align: center;
+}
+
+figure svg {
+  max-width: 100%;
+  height: auto !important;
+}
+
+a[href] {
+  color: inherit;
+  font-variant: small-caps;
+  font-weight: bold;
+  opacity: .8;
+  text-decoration: none;
+  font-style: oblique;
+}
+
+.tableofcontents a {
+  font-variant: normal;
+  font-style: normal;
+  font-weight: normal;
+  opacity: 1;
+}
+
+.tableofcontents > li a {
+  font-weight: bold;
+}
+
+.tableofcontents > li li > a {
+  font-weight: normal;
+}

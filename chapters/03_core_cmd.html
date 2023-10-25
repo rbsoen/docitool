@@ -11,23 +11,23 @@
                 <strong>except</strong> h1, because an h1 is assumed to be used for
                 the title of the document.
 
-                Each affected heading <i>must</i> have an HTML ID defined, because it
-                will be used to link to it in the table of contents.
-
-
                 It takes no arguments.
             </div>
             <div class="arguments">
                 <b>Arguments</b>: None
             </div>
             <div class="example">
-                Example: <code>{{ verbatim: {{ table of contents: }}}}</code>
+                <b>Example</b>: <code>{{ verbatim: {{ table of contents: }}}}</code>
             </div>
+            <p>
+                Each affected heading <em>must</em> have an HTML ID defined, because it
+                will be used to link to it in the table of contents.
+            </p>
             <div class="example correct-example">
-                Correct heading: <code>&LT;h2 id="heading"&GT;Heading&LT;/h2&GT;</code>
+                <b>Correct</b>: <code>&LT;h2 id="heading"&GT;Heading&LT;/h2&GT;</code>
             </div>
             <div class="example wrong-example">
-                Wrong heading: <code>&LT;h2&GT;Heading&LT;/h2&GT;</code>
+                <b>Wrong</b>: <code>&LT;h2&GT;Heading&LT;/h2&GT;</code>
             </div>
         </dd>
     </div>
