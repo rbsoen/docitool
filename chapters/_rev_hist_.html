@@ -1,0 +1,18 @@
+<section id="s_rev_hist">
+    <h2 id="rev_hist">Revision History</h2>
+    <p>
+    The following is automatically generated from the <code>git log</code> command.
+    </p>
+    <table>
+    <thead>
+    <th>Date</th>
+    <th>Revision ID</th>
+    <th>Author</th>
+    <th>Changes</th>
+    </thead>
+    <tbody>
+    <!-- dynamically generated from git log -->
+    {{ shell: git log --pretty="format:<tr><td><date timedate="%ai">%as</date></td><td>%h</td><td>%an</td><td>%s</td></tr>" -- chapters/* uml/* style/* index.html }}
+    </tbody>
+    </table>
+</section>

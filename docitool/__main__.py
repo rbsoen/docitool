@@ -103,6 +103,22 @@ def _verbatim(m: Match) -> str:
     logger.debug("'%s'" % verbatim)
     return verbatim
 
+def _shell(m: Match) -> str:
+    """
+    Pastes the output of an external comamnd.
+    Runs in the shell.
+    """
+    global logger
+    import subprocess
+    params = m.group(2).strip()
+    logger.info("Running command: %s" % params)
+    return subprocess.run(
+        params,
+        shell=True,
+        stdout=subprocess.PIPE,
+        encoding="utf-8"
+    ).stdout
+
 ########## optionals: citeproc #########################
 
 def _addsourcesfrom(m: Match) -> str:
@@ -351,6 +367,7 @@ CommandTable = dict[str, CommandFunction]
 
 commands: CommandTable = { # 1st stage
     "include": _include,
+    "shell": _shell,
     "verbatim": _invalid_here, ###
     "table of contents": _invalid_here, ###
 # -------- optional ---------
@@ -407,7 +424,6 @@ def is_file_newer_than_cache(filename: str) -> Tuple[bool, str]:
     
     logger.debug("Don't need to regenerate cache for %s", filename)
     return (False, cache_file)
-    
 
 def landmarks2toc(content: StringIO, landmarks: list[HeadingTypeAtomic], level: int):
     """
