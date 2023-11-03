@@ -361,6 +361,30 @@ def _graph(m: Match) -> str:
     with open(cache_file, "r") as cache:
         return cache.read()
 
+########## optionals: github markdown #########################
+
+def _markdown(m: Match) -> str:
+    """
+    Includes a Markdown document, formatted as
+    GitHub-Flavored Markdown.
+    """
+    global logger
+    params = m.group(2).strip()
+
+    if params == "":
+        raise Exception("Missing file path!")
+    
+    import markdown
+    md = markdown.Markdown(extensions=["toc"])
+
+    with open(params, "r") as includedfile:
+        logger.info("Inserting Markdown file %s" % params)
+        return replacer(
+            md.convert(
+                includedfile.read()
+            )
+        )
+
 ######## map commands to text ############
 
 CommandTable = dict[str, CommandFunction]
@@ -380,7 +404,9 @@ commands: CommandTable = { # 1st stage
 # katex
     "formula": _formula,
 # matplotlib
-    "graph": _graph
+    "graph": _graph,
+# markdown
+    "markdown": _markdown
 }
 
 commands_after: CommandTable = { # 2nd stage

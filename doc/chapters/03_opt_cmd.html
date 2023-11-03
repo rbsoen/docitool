@@ -240,3 +240,40 @@
         </dd>
     </div>
 </dl>
+
+<h5 id="markdncmds">Markdown</h5>
+<p>
+Markdown is a popular markup shorthand format. It's advantageous for writers, since the format lets writers focus more on the content rather than the specific markup, therefore reducing friction. There are many
+versions of Markdown, but this parser uses the original
+version. This means tables&mdash;among other things&mdash;will still need to be done manually. You will need the <a href="https://python-markdown.github.io/">Python-Markdown</a> package to
+use these commands.
+</p>
+<dl class="commands">
+    <div>
+        <dt><code>markdown</code></dt>
+        <dd>
+            <div class="dddesc">
+                Similar to <code>include</code>, but the result
+                is parsed through Python-Markdown.
+                Any headings will automatically have an ID
+                added to them. You may still use HTML
+                in the markdown files.
+            </div>
+            <div class="pkgreqs">
+                <b>Package requirements</b>:
+                <ul>
+                    <li>markdown</li>
+                </ul>
+            </div>
+            <div class="arguments">
+                <b>Arguments</b>:
+                <ul>
+                    <li>The markdown file to include.</li>
+                </ul>
+            </div>
+            <div class="example">
+                <b>Example</b>: <code>{{ verbatim: {{ markdown: chapters/chapter04.md }} }}</code>
+            </div>
+        </dd>
+    </div>
+</dl>

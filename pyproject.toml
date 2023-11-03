@@ -14,6 +14,7 @@ dependencies = [
 citations = ["citeproc-py", "toml"]
 formulas = ["markdown-katex"]
 plots = ["matplotlib"]
+markdown = ["markdown"]
 
 [project.scripts]
 docitool = "docitool.__main__:main"
