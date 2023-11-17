@@ -373,9 +373,9 @@ def _markdown(m: Match) -> str:
 
     if params == "":
         raise Exception("Missing file path!")
-    
+    s
     import markdown
-    md = markdown.Markdown(extensions=["toc"])
+    md = markdown.Markdown(extensions=["toc", "fenced_code"])
 
     with open(params, "r") as includedfile:
         logger.info("Inserting Markdown file %s" % params)
